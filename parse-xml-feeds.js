@@ -1,17 +1,23 @@
 const fs = require("fs");
-const { get } = require("http");
 const xml2js = require("xml2js");
+
+const IDS = {
+  STATIONZED: "stationzed",
+  BOOZING_AND_BONDING: "boozing-and-bonding",
+  SPRINGFIELD_THE_LATER_YEARS: "springfield-the-later-years",
+  THE_DUST_OFF: "the-dust-off",
+  WRESTLE_DADDIES: "wrestle-daddies",
+};
 
 const FEEDS = {
   CHANNEL: {
-    STATIONZED: "channel-feed-stationzed",
-    THEDUSTOFF: "channel-feed-thedustoff",
+    STATIONZED: `channel-feed-${IDS.STATIONZED}`,
   },
   SHOW: {
-    BOOZING_AND_BONDING: "show-feed-boozing-and-bonding",
-    SPRINGFIELD_THE_LATER_YEARS: "show-feed-springfield-the-later-years",
-    THE_DUST_OFF: "show-feed-the-dust-off",
-    WRESTLE_DADDIES: "show-feed-wrestle-daddies",
+    BOOZING_AND_BONDING: `show-feed-${IDS.BOOZING_AND_BONDING}`,
+    SPRINGFIELD_THE_LATER_YEARS: `show-feed-${IDS.SPRINGFIELD_THE_LATER_YEARS}`,
+    THE_DUST_OFF: `show-feed-${IDS.THE_DUST_OFF}`,
+    WRESTLE_DADDIES: `show-feed-${IDS.WRESTLE_DADDIES}`,
   },
 };
 
@@ -36,13 +42,12 @@ const getFeedInfo = (feed) => {
     title: title[0],
     description: description[0],
     copyright: copyright[0],
-    image: image[0].url[0],
+    imageUrl: image[0].url[0],
+    feedId: feed,
   };
 };
 
-const getFeedSingleItem = (singleItem, index) => {
-  // if (index !== 0) return null;
-
+const getFeedSingleItem = (singleItem, feed) => {
   const { title, link, pubDate, description, enclosure, ...item } = singleItem;
 
   const linkParts = link[0].split("/").filter((part) => part !== "");
@@ -55,25 +60,53 @@ const getFeedSingleItem = (singleItem, index) => {
     day: "numeric",
   }).format(dateObj);
 
-  return {
+  const commonItem = {
+    feedId: feed,
     title: title[0],
     id: idFromLink,
     date: formattedDate,
-    summary: description[0],
+    summary: item["itunes:subtitle"][0],
     fileUrl: enclosure[0]["$"].url,
     fileType: enclosure[0]["$"].type,
     show: item["itunes:author"][0],
     duration: item["itunes:duration"][0],
     explicit: item["itunes:explicit"][0],
     keywords: item["itunes:keywords"][0],
-    content: item["content:encoded"][0],
-    imageUrl: item["itunes:image"][0]["$"].href,
+    content: description[0],
+    imageUrl: "",
   };
+
+  switch (feed) {
+    case FEEDS.SHOW.BOOZING_AND_BONDING:
+      return {
+        ...commonItem,
+        showId: IDS.BOOZING_AND_BONDING,
+      };
+    case FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS:
+      return {
+        ...commonItem,
+        showId: IDS.SPRINGFIELD_THE_LATER_YEARS,
+      };
+    case FEEDS.SHOW.WRESTLE_DADDIES:
+      return {
+        ...commonItem,
+        showId: IDS.WRESTLE_DADDIES,
+      };
+    default:
+      return {
+        ...commonItem,
+        showId: IDS.THE_DUST_OFF,
+        content: item["content:encoded"][0],
+        imageUrl: item["itunes:image"][0]["$"].href,
+      };
+  }
 };
 
 const getFeedItems = (feed) => {
   const { item: feedItems } = getParsedXmlFeed(feed);
-  return feedItems.map(getFeedSingleItem).filter((item) => item !== null);
+  return feedItems
+    .map((item) => getFeedSingleItem(item, feed))
+    .filter((item) => item !== null);
 };
 
 const createJsonFeed = (feed) => {
@@ -85,12 +118,12 @@ const createJsonFeed = (feed) => {
     if (err) {
       console.error("Error! ", err);
     } else {
-      console.log("Successful!");
+      console.log("Successful! ", feed);
     }
   });
 };
 
 createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
-// createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
-// createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
-// createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
+createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
+createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
+createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
