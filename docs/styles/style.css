@@ -1,4 +1,142 @@
+html {
+  font-size: 100%;
+}
+
+/* TYPOGRAPHY */
+
 body {
-  font-family: "Libre Franklin", "Helvetica Neue", helvetica, arial, sans-serif;
-  font-weight: 400;
+  font-size: var(--font-size-body);
+  font-family: var(--font-family-body);
+  font-weight: var(--font-weight-body);
+  background: var(--theme-color-body);
+  color: var(--theme-color-text);
+  line-height: 1.35;
+}
+
+strong,
+h1,
+h2,
+h3 {
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  font-size: var(--font-size-heading-1);
+  color: var(--theme-color-heading-1);
+  margin: 0.5em 0 1em;
+}
+
+h2 {
+  font-size: var(--font-size-heading-2);
+  color: var(--theme-color-heading-2);
+  margin: 1em 0;
+}
+
+h3 {
+  font-size: var(--font-size-heading-3);
+  color: var(--theme-color-heading-3);
+  margin: 1em 0;
+}
+
+p {
+  margin: 1em 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0;
+}
+
+/* LAYOUT */
+
+section {
+  padding: 2rem 0;
+}
+
+section > .inner {
+  width: 96vw;
+  max-width: 46rem;
+  margin: 0 auto;
+}
+
+/* BANNER SECTION */
+
+.banner-section {
+  border-bottom: solid 0.15rem var(--color-shadow-dark);
+  position: relative;
+}
+
+.banner-section:before {
+  content: "";
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: block;
+  position: absolute;
+  background: url(../images/stationzed-bg.jpg) var(--theme-color-banner);
+  backdrop-filter: blur(1);
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-size: cover;
+  transform: rotateY(180deg);
+}
+
+[role="banner"] {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+  padding: 8rem 0 2rem;
+}
+
+.banner-logo {
+  flex: 0 1 10rem;
+  box-shadow: 0 0.5rem 1rem var(--color-shadow-dark);
+  overflow: hidden;
+  border-radius: 0.25rem;
+  transform: rotate(-2deg);
+  position: relative;
+  z-index: 3;
+}
+
+.banner-text {
+  color: var(--theme-color-heading-2);
+  background: var(--color-shadow-dark);
+  padding: 0.75rem 3rem 1.25rem 2rem;
+  border-top-right-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.banner-text:before {
+  content: "";
+  display: block;
+  height: 100%;
+  width: 2rem;
+  background: var(--color-shadow-dark);
+  right: 100%;
+  top: 0;
+  position: absolute;
+}
+
+.banner-text p {
+  font-size: var(--font-size-banner-text);
+  margin: 0;
+}
+
+.banner-text p.huge {
+  font-weight: var(--font-weight-heavy);
+  font-size: var(--font-size-banner-heading);
+}
+
+.banner-text {
+}
+
+/* MAIN SECTION */
+
+.main-section {
 }
