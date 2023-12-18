@@ -1,0 +1,19 @@
+{
+  "name": "stationzed",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stephenbelyea/stationzed.git"
+  },
+  "author": "https://github.com/stephenbelyea",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/stephenbelyea/stationzed/issues"
+  },
+  "homepage": "https://github.com/stephenbelyea/stationzed#readme"
+}
