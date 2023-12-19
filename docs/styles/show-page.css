@@ -1,0 +1,24 @@
+[role="banner"] {
+  padding: 0;
+}
+
+#episodes {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(18rem, 28rem));
+  justify-content: center;
+  gap: 1.5rem;
+  padding: 1.5rem;
+}
+
+.episode {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+.episode-body {
+  padding: 0.25em 1.25em 0.75em;
+}
+
+.episode a {
+  color: var(--color-red-dark);
+}

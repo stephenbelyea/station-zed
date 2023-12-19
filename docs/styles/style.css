@@ -73,8 +73,8 @@ section {
   padding: 2rem 0;
 }
 
-section > .inner {
-  width: 96vw;
+section .inner {
+  width: 90vw;
   max-width: 46rem;
   margin: 0 auto;
 }
