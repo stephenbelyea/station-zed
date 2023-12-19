@@ -4,7 +4,7 @@
 
 #episodes {
   display: grid;
-  grid-template-columns: repeat(2, minmax(18rem, 28rem));
+  grid-template-columns: repeat(4, minmax(18rem, 28rem));
   justify-content: center;
   gap: 1.5rem;
   padding: 1.5rem;
@@ -13,6 +13,8 @@
 .episode {
   background: var(--color-white);
   color: var(--color-black);
+  overflow: hidden;
+  border-radius: 0.35rem;
 }
 
 .episode-body {
@@ -21,4 +23,30 @@
 
 .episode a {
   color: var(--color-red-dark);
+}
+
+@media (max-width: 1600px) {
+  #episodes {
+    grid-template-columns: repeat(3, minmax(18rem, 28rem));
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 1000px) {
+  #episodes {
+    grid-template-columns: repeat(2, minmax(18rem, 28rem));
+  }
+}
+
+@media (max-width: 650px) {
+  #episodes {
+    display: block;
+    padding: 1.5rem 0;
+    width: 90vw;
+    margin: 0 auto;
+  }
+
+  .episode {
+    margin: 1.5rem auto;
+  }
 }

@@ -2,17 +2,62 @@ const episodesElem = document.getElementById("episodes");
 
 const feedId = episodesElem.getAttribute("data-feed-id");
 const showId = episodesElem.getAttribute("data-show-id");
+let fallbackImgUrl = "";
+
+const summaryLength = 250;
+
+const templateEpisode = ({
+  id,
+  imageUrl,
+  title,
+  date,
+  duration,
+  fileUrl,
+  summary,
+}) => `
+<article class="episode" id="${id}">
+  <img
+    class="episode-img"
+    src="${imageUrl ? imageUrl : fallbackImgUrl}"
+    alt=""
+  />
+  <div class="episode-body">
+    <h3 id="${id}-title">
+      <a href="#${id}">${title}</a>
+    </h3>
+    <ul class="meta">
+      <li>${date}</li>
+      <li>${duration}</li>
+      <li>${
+        fileUrl
+          ? `<a href="${fileUrl}" aria-describedby="${id}-title">Download</a>`
+          : "File not available"
+      }</li>
+    </ul>
+    <p>${
+      summary.length > summaryLength
+        ? summary.substring(0, summaryLength).trim() + "..."
+        : summary
+    }</p>
+  </div>
+</article>
+`;
 
 const getShowFeed = async () => {
   try {
     const response = await fetch(`./data/${feedId}.json`);
-    const showFeed = await response.json();
-    return showFeed;
+    return await response.json();
   } catch (err) {
     console.log("Error!", err);
     return null;
   }
 };
 
-const showFeed = await getShowFeed();
-console.log(showFeed);
+const buildShowFeed = async () => {
+  const { episodes, show } = await getShowFeed();
+  fallbackImgUrl = show.imageUrl;
+  const episodesHtml = episodes.map(templateEpisode);
+  episodesElem.innerHTML = episodesHtml.join("");
+};
+
+buildShowFeed();
