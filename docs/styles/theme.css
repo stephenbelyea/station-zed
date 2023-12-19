@@ -10,6 +10,7 @@
   --font-size-small: 0.875rem;
   --font-size-body: 1rem;
   --font-size-heading-3: 1.25rem;
+  --font-size-blockquote: 1.5rem;
   --font-size-heading-2: 1.75rem;
   --font-size-heading-1: 2rem;
   --font-size-banner-heading: 3rem;
@@ -23,12 +24,19 @@
   --color-red-dark: #880000;
   --color-blue: #237199;
   --color-shadow-dark: rgba(0, 0, 0, 0.65);
+  --color-shadow-light: rgba(0, 0, 0, 0.25);
+
+  --box-shadow-dark: 0 0.5rem 1rem var(--color-shadow-dark);
+  --box-shadow-light: 0 0.25rem 0.5rem var(--color-shadow-light);
 
   --theme-color-body: var(--color-black);
   --theme-color-banner: var(--color-blue);
   --theme-color-text: var(--color-white);
   --theme-color-link: var(--color-yellow);
+  --theme-color-link-hocus: var(--color-red-light);
   --theme-color-heading-3: var(--color-grey-light);
   --theme-color-heading-2: var(--color-yellow);
   --theme-color-heading-1: var(--color-red-light);
+
+  --bg-blur-light: blur(0.15rem);
 }
