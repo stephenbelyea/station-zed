@@ -62,7 +62,7 @@ blockquote {
   font-weight: var(--font-weight-light);
   font-size: var(--font-size-blockquote);
   line-height: 1.75;
-  padding: 0.5em 2.5em;
+  padding: 0.5em 2em;
   margin: 0.5em 0 1.5em;
   font-style: italic;
 }
@@ -75,7 +75,7 @@ section {
 
 section .inner {
   width: 90vw;
-  max-width: 46rem;
+  max-width: 50rem;
   margin: 0 auto;
 }
 
@@ -110,18 +110,18 @@ section .inner {
 }
 
 .banner-logo {
-  flex: 0 1 10rem;
+  flex: 0 1 14rem;
   box-shadow: var(--box-shadow-dark);
   overflow: hidden;
   border-radius: 0.25rem;
-  transform: rotate(-2deg);
+  transform: rotate(-3deg) translateX(-0.25rem);
   position: relative;
   z-index: 3;
 }
 
 .banner-text {
   background: var(--color-shadow-dark);
-  padding: 0.75rem 3rem 1.25rem 2rem;
+  padding: 0.75rem 2rem 1.5rem 2.5rem;
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   position: relative;
@@ -144,7 +144,12 @@ section .inner {
 .banner-text > * {
   font-size: var(--font-size-banner-text);
   color: var(--theme-color-heading-2);
+  line-height: 1.25;
   margin: 0;
+}
+
+.banner-text > * + * {
+  margin-top: 0.25em;
 }
 
 .banner-text > .huge {

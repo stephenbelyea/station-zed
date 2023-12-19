@@ -2,7 +2,6 @@ const episodesElem = document.getElementById("episodes");
 
 const feedId = episodesElem.getAttribute("data-feed-id");
 const showId = episodesElem.getAttribute("data-show-id");
-let fallbackImgUrl = "";
 
 const summaryLength = 250;
 
@@ -16,11 +15,7 @@ const templateEpisode = ({
   summary,
 }) => `
 <article class="episode" id="${id}">
-  <img
-    class="episode-img"
-    src="${imageUrl ? imageUrl : fallbackImgUrl}"
-    alt=""
-  />
+  ${imageUrl ? `<img class="episode-img" src="${imageUrl}" alt="" />` : ""}
   <div class="episode-body">
     <h3 id="${id}-title">
       <a href="#${id}">${title}</a>
@@ -54,8 +49,7 @@ const getShowFeed = async () => {
 };
 
 const buildShowFeed = async () => {
-  const { episodes, show } = await getShowFeed();
-  fallbackImgUrl = show.imageUrl;
+  const { episodes } = await getShowFeed();
   const episodesHtml = episodes.map(templateEpisode);
   episodesElem.innerHTML = episodesHtml.join("");
 };
