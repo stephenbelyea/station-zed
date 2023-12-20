@@ -125,8 +125,12 @@ section .inner {
   border-top-right-radius: 0.5rem;
   border-bottom-right-radius: 0.5rem;
   position: relative;
+  min-height: 6rem;
   backdrop-filter: var(--bg-blur-light);
   z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .banner-text:before {
@@ -155,4 +159,28 @@ section .inner {
 .banner-text > .huge {
   font-weight: var(--font-weight-heavy);
   font-size: var(--font-size-banner-heading);
+}
+
+@media (max-width: 1000px) {
+  html {
+    font-size: 90%;
+  }
+}
+
+@media (max-width: 650px) {
+  html {
+    font-size: 85%;
+  }
+
+  blockquote {
+    padding: 0;
+  }
+
+  [role="banner"] {
+    gap: 0;
+  }
+
+  .banner-text {
+    padding: 0.5rem 1.5rem;
+  }
 }

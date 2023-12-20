@@ -34,7 +34,7 @@
 
 @media (max-width: 1000px) {
   #episodes {
-    grid-template-columns: repeat(2, minmax(18rem, 28rem));
+    grid-template-columns: repeat(2, minmax(18rem, 30rem));
   }
 }
 
