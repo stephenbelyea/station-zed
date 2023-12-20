@@ -25,6 +25,27 @@
   color: var(--color-red-dark);
 }
 
+.episode .meta,
+.episode .meta li {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.episode .meta li {
+  width: max-content;
+}
+
+.episode .meta {
+  flex-wrap: wrap;
+  gap: 1em;
+}
+
+.episode .meta img {
+  width: 1.5em;
+  margin-right: 0.15em;
+}
+
 @media (max-width: 1600px) {
   #episodes {
     grid-template-columns: repeat(3, minmax(18rem, 28rem));

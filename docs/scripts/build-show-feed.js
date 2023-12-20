@@ -21,13 +21,13 @@ const templateEpisode = ({
       <a href="#${id}">${title}</a>
     </h3>
     <ul class="meta">
-      <li>${date}</li>
-      <li>${duration}</li>
-      <li>${
-        fileUrl
-          ? `<a href="${fileUrl}" aria-describedby="${id}-title">Download</a>`
-          : "File not available"
-      }</li>
+      <li><img src="icons/calendar.svg" alt="Release date" /> ${date}</li>
+      <li><img src="icons/timer.svg" alt="Episode length" /> ${duration}</li>
+      <li><img src="icons/${fileUrl ? "download" : "headset"}.svg" alt="" /> ${
+  fileUrl
+    ? `<a href="${fileUrl}" aria-describedby="${id}-title">Download file</a>`
+    : "File not available"
+}</li>
     </ul>
     <p>${
       summary.length > summaryLength
