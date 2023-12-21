@@ -46,6 +46,53 @@
   margin-right: 0.15em;
 }
 
+body.view-episode {
+  overflow: hidden;
+  position: relative;
+}
+
+.view-episode > section {
+  position: relative;
+  z-index: 2;
+}
+
+#modal-overlay {
+  display: none;
+}
+
+.view-episode > #modal-overlay {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  background: var(--color-shadow-dark);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.view-episode #modal {
+  width: 86vw;
+  max-width: 50rem;
+  height: 86vh;
+  overflow-y: auto;
+  background: var(--color-white);
+  box-shadow: var(--box-shadow-dark);
+  border-radius: 0.5rem;
+}
+
+.modal-body {
+  color: var(--color-black);
+  padding: 2rem;
+}
+
+.modal-body h2,
+.modal-body a {
+  color: var(--color-red-dark);
+}
+
 @media (max-width: 1600px) {
   #episodes {
     grid-template-columns: repeat(3, minmax(18rem, 28rem));
