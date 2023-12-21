@@ -37,23 +37,23 @@
   color: var(--color-red-dark);
 }
 
-.episode .meta,
-.episode .meta li {
+.meta,
+.meta li {
   display: flex;
   justify-content: flex-start;
   align-items: center;
 }
 
-.episode .meta li {
+.meta li {
   width: max-content;
 }
 
-.episode .meta {
+.meta {
   flex-wrap: wrap;
   gap: 1em;
 }
 
-.episode .meta img {
+.meta img {
   width: 1.5em;
   margin-right: 0.15em;
 }
@@ -95,14 +95,27 @@ body.view-episode {
   border-radius: 0.5rem;
 }
 
+.modal-banner audio {
+  width: 100%;
+}
+
 .modal-body {
   color: var(--color-black);
-  padding: 2rem;
+  padding: 0.5rem 2rem 1.5rem;
 }
 
 .modal-body h2,
 .modal-body a {
   color: var(--color-red-dark);
+}
+
+.episode-content {
+  margin: 3rem 0;
+}
+
+.back-to-episodes {
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-heading-3);
 }
 
 @media (max-width: 1600px) {

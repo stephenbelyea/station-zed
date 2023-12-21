@@ -6,10 +6,52 @@ const episodes = document.getElementById("episodes");
 const feedId = episodes.getAttribute("data-feed-id");
 const showId = episodes.getAttribute("data-show-id");
 
-const templateEpisodeDetails = ({ title }) => `
+const getFileDownloadLink = (fileId) =>
+  `https://drive.google.com/u/0/uc?id=${fileId}&export=download`;
+
+const templateEpisodeAudioPlayer = (episodeFile) => {
+  if (!episodeFile) return "";
+  const { fileId, fileType } = episodeFile;
+  return [
+    `<audio controls preload="metadata">`,
+    `<source src="${getFileDownloadLink(fileId)}" type="${fileType}" />`,
+    `</audio>`,
+  ];
+};
+
+const templateEpisodeMp3File = (id, episodeFile) => {
+  if (!episodeFile)
+    return '<img src="icons/headset.svg" alt="" /> File not available';
+  const { fileId } = episodeFile;
+  return [
+    `<img src="icons/download.svg" alt="" /> `,
+    `<a href="${getFileDownloadLink(fileId)}" aria-describedby="${id}-title">`,
+    `Download file`,
+    `</a>`,
+  ].join("");
+};
+
+const templateEpisodeDetails = (
+  { id, title, date, duration, imageUrl, content },
+  episodeFile
+) => `
+  <div class="modal-banner">
+    <img src="${imageUrl}" alt="" />
+    ${templateEpisodeAudioPlayer(episodeFile)}
+  </div>
   <div class="modal-body">
-    <h2>${title}</h2>
-    <p><a href="./show-${showId}.html">Back to episodes list</a></p>
+    <h2 id="${id}-title">${title}</h2>
+    <ul class="meta">
+      <li><img src="icons/calendar.svg" alt="Release date" /> ${date}</li>
+      <li><img src="icons/timer.svg" alt="Episode length" /> ${duration}</li>
+      <li>${templateEpisodeMp3File(id, episodeFile)}</li>
+    </ul>
+    <div class="episode-content">
+      ${content}
+    </div>
+    <p class="back-to-episodes">
+      <a href="./show-${showId}.html">Back to episodes list</a>
+    </p>
   </div>
 `;
 
@@ -19,10 +61,9 @@ const toggleSectionsAriaHidden = (ariaHidden = "false") => {
   }
 };
 
-const toggleEpisodeDetailsModal = (episode = null) => {
-  console.log(episode);
+const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
   if (episode) {
-    modal.innerHTML = templateEpisodeDetails(episode);
+    modal.innerHTML = templateEpisodeDetails(episode, episodeFile);
     modal.setAttribute("aria-modal", "true");
     modalOverlay.setAttribute("aria-hidden", "false");
     toggleSectionsAriaHidden("true");
@@ -47,12 +88,26 @@ const getEpisodeFromShowFeed = async (episodeId) => {
   }
 };
 
+const getMp3FilesForEpisode = async (episodeId) => {
+  try {
+    const response = await fetch(`./data/mp3-filemap.json`);
+    const { files } = await response.json();
+    return files.find(
+      (file) => file.showId === showId && file.episodeId === episodeId
+    );
+  } catch (err) {
+    console.log("Error!", err);
+    return null;
+  }
+};
+
 const onUrlHashChange = async () => {
   const { hash } = window.location;
   if (hash) {
     const episodeId = hash.replace("#", "");
     const episode = await getEpisodeFromShowFeed(episodeId);
-    toggleEpisodeDetailsModal(episode);
+    const episodeFile = await getMp3FilesForEpisode(episodeId);
+    toggleEpisodeDetailsModal(episode, episodeFile);
   } else {
     toggleEpisodeDetailsModal();
   }
