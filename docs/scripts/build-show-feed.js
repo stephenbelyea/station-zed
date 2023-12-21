@@ -23,6 +23,13 @@ const templateEpisodeMp3File = (id) => {
   ].join("");
 };
 
+const templateEpisodeSummary = (rawSummary) => {
+  const summary = rawSummary.replaceAll("â", "'").replaceAll("Â", "");
+  return summary.length > summaryLength
+    ? summary.substring(0, summaryLength).trim() + "..."
+    : summary;
+};
+
 const templateEpisode = ({ id, imageUrl, title, date, duration, summary }) => `
 <article class="episode" id="${id}">
   ${imageUrl ? `<img class="episode-img" src="${imageUrl}" alt="" />` : ""}
@@ -35,11 +42,7 @@ const templateEpisode = ({ id, imageUrl, title, date, duration, summary }) => `
       <li><img src="icons/timer.svg" alt="Episode length" /> ${duration}</li>
       <li>${templateEpisodeMp3File(id)}</li>
     </ul>
-    <p>${
-      summary.length > summaryLength
-        ? summary.substring(0, summaryLength).trim() + "..."
-        : summary
-    }</p>
+    <p>${templateEpisodeSummary(summary)}</p>
   </div>
 </article>
 `;
