@@ -145,3 +145,9 @@ const onLoadHash = window.location.hash;
 if (onLoadHash && onLoadHash !== backLinkHash) {
   onUrlHashChange();
 }
+
+addEventListener("keydown", ({ key }) => {
+  if (key === "Escape" && modal.getAttribute("aria-modal") === "true") {
+    toggleEpisodeDetailsModal();
+  }
+});
