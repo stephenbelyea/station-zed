@@ -126,7 +126,7 @@ const getMp3FilesForEpisode = async (episodeId) => {
   }
 };
 
-const onUrlHashChange = async function (event) {
+const onUrlHashChange = async function () {
   const { hash } = window.location;
   if (hash && hash !== backLinkHash) {
     lastLinkHash = hash;
@@ -140,3 +140,8 @@ const onUrlHashChange = async function (event) {
 };
 
 addEventListener("hashchange", onUrlHashChange);
+
+const onLoadHash = window.location.hash;
+if (onLoadHash && onLoadHash !== backLinkHash) {
+  onUrlHashChange();
+}
