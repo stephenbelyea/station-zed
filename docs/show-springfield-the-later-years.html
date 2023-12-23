@@ -32,7 +32,7 @@
       </div>
     </section>
     <section class="main-section">
-      <main>
+      <main tabindex="-1">
         <div class="inner">
           <blockquote>
             There are few things as hollowed for Simpsons fans as Seasons 2-11.
@@ -65,6 +65,10 @@
     <section class="footer-section">
       <footer class="inner"></footer>
     </section>
+    <div id="modal-overlay" aria-hidden="true">
+      <div id="modal" role="dialog" aria-modal="false" tabindex="-1"></div>
+    </div>
   </body>
   <script type="module" src="scripts/build-show-feed.js"></script>
+  <script type="module" src="scripts/view-episode-details.js"></script>
 </html>

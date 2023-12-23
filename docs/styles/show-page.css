@@ -88,7 +88,7 @@ body.view-episode {
 .view-episode #modal {
   width: 86vw;
   max-width: 50rem;
-  height: 86vh;
+  height: 90vh;
   overflow-y: auto;
   background: var(--color-white);
   box-shadow: var(--box-shadow-dark);

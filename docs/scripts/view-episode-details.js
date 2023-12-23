@@ -52,7 +52,7 @@ const templateEpisodeDetails = (
   episodeFile
 ) => `
   <div class="modal-banner">
-    <img src="${imageUrl}" alt="" />
+    ${imageUrl ? `<img src="${imageUrl}" alt="" />` : ""}
     ${templateEpisodeAudioPlayer(episodeFile)}
   </div>
   <div class="modal-body">
