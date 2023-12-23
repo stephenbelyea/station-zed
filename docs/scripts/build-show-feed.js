@@ -1,4 +1,6 @@
 const { files: mp3Files } = await window.StationZed.mp3Filemap;
+const { files: jpgFiles } = await window.StationZed.jpgFilemap;
+
 const summaryLength = 250;
 
 const templateEpisodeMp3File = (id) => {
@@ -24,9 +26,24 @@ const templateEpisodeSummary = (rawSummary) => {
     : summary;
 };
 
-const templateEpisode = ({ id, imageUrl, title, date, duration, summary }) => `
+const templateEpisodeImage = (id) => {
+  const jpgFile = jpgFiles.find((file) => file.episodeId === id);
+  if (!jpgFile || !jpgFile.fileId) return "";
+  const { fileId, fileType } = jpgFile;
+  const { showId } = window.StationZed;
+  const fileName = fileId === "showId-episodeId" ? `${showId}-${id}` : fileId;
+  const filePath = `images/${showId}/${fileName}.jpg`;
+  return [
+    `<picture>`,
+    `<source src="${filePath}" type="${fileType}" />`,
+    `<img src="${filePath}" alt="" />`,
+    `</picture>`,
+  ].join("");
+};
+
+const templateEpisode = ({ id, title, date, duration, summary }) => `
 <article class="episode" id="${id}">
-  ${imageUrl ? `<img class="episode-img" src="${imageUrl}" alt="" />` : ""}
+  ${templateEpisodeImage(id)}
   <div class="episode-body">
     <h3 id="${id}-title">
       <a href="#${id}" class="view-episode-link">${title}</a>

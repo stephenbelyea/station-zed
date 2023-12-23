@@ -1,3 +1,6 @@
+const { files: mp3Files } = await window.StationZed.mp3Filemap;
+const { files: jpgFiles } = await window.StationZed.jpgFilemap;
+
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
 const sections = document.getElementsByTagName("section");
@@ -8,9 +11,28 @@ const backLinkHash = "#back";
 const getFileDownloadLink = (fileId) =>
   `https://drive.google.com/u/0/uc?id=${fileId}&export=download`;
 
-const templateEpisodeAudioPlayer = (episodeFile) => {
-  if (!episodeFile || !episodeFile.fileId) return "";
-  const { fileId, fileType } = episodeFile;
+const getMp3File = (id) => mp3Files.find((file) => file.episodeId === id);
+const getJpgFile = (id) => jpgFiles.find((file) => file.episodeId === id);
+
+const templateEpisodeImage = (id) => {
+  const jpgFile = getJpgFile(id);
+  if (!jpgFile || !jpgFile.fileId) return "";
+  const { fileId, fileType } = jpgFile;
+  const { showId } = window.StationZed;
+  const fileName = fileId === "showId-episodeId" ? `${showId}-${id}` : fileId;
+  const filePath = `images/${showId}/${fileName}.jpg`;
+  return [
+    `<picture>`,
+    `<source src="${filePath}" type="${fileType}" />`,
+    `<img src="${filePath}" alt="" />`,
+    `</picture>`,
+  ].join("");
+};
+
+const templateEpisodeAudioPlayer = (id) => {
+  const mp3File = getMp3File(id);
+  if (!mp3File || !mp3File.fileId) return "";
+  const { fileId, fileType } = mp3File;
   return [
     `<audio controls preload="metadata">`,
     `<source src="${getFileDownloadLink(fileId)}" type="${fileType}" />`,
@@ -18,10 +40,11 @@ const templateEpisodeAudioPlayer = (episodeFile) => {
   ];
 };
 
-const templateEpisodeMp3File = (id, episodeFile) => {
-  if (!episodeFile || !episodeFile.fileId)
+const templateEpisodeMp3File = (id) => {
+  const mp3File = getMp3File(id);
+  if (!mp3File || !mp3File.fileId)
     return '<img src="icons/headset.svg" alt="" /> File not available';
-  const { fileId } = episodeFile;
+  const { fileId } = mp3File;
   return [
     `<img src="icons/download.svg" alt="" /> `,
     `<a href="${getFileDownloadLink(fileId)}" aria-describedby="${id}-title">`,
@@ -42,20 +65,24 @@ const templateEpisodeContent = (rawContent, rawKeywords) => {
   ].join("");
 };
 
-const templateEpisodeDetails = (
-  { id, title, date, duration, imageUrl, content, keywords },
-  episodeFile
-) => `
+const templateEpisodeDetails = ({
+  id,
+  title,
+  date,
+  duration,
+  content,
+  keywords,
+}) => `
   <div class="modal-banner">
-    ${imageUrl ? `<img src="${imageUrl}" alt="" />` : ""}
-    ${templateEpisodeAudioPlayer(episodeFile)}
+    ${templateEpisodeImage(id)}
+    ${templateEpisodeAudioPlayer(id)}
   </div>
   <div class="modal-body">
     <h2 id="${id}-title">${title}</h2>
     <ul class="meta">
       <li><img src="icons/calendar.svg" alt="Release date" /> ${date}</li>
       <li><img src="icons/timer.svg" alt="Episode length" /> ${duration}</li>
-      <li>${templateEpisodeMp3File(id, episodeFile)}</li>
+      <li>${templateEpisodeMp3File(id)}</li>
     </ul>
     ${templateEpisodeContent(content, keywords)}
     <p class="back-to-episodes">
@@ -116,11 +143,8 @@ const onUrlHashChange = async () => {
     window.StationZed.lastLinkHash = hash;
     const episodeId = hash.replace("#", "");
     const { episodes } = await window.StationZed.showFeed;
-    const { files } = await window.StationZed.mp3Filemap;
-
     const episode = episodes.find((ep) => ep.id === episodeId);
-    const mp3File = files.find((file) => file.episodeId === episodeId);
-    toggleEpisodeDetailsModal(episode, mp3File);
+    toggleEpisodeDetailsModal(episode);
   } else {
     toggleEpisodeDetailsModal();
   }
