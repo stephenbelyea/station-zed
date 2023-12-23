@@ -35,7 +35,7 @@ const templateEpisode = ({ id, imageUrl, title, date, duration, summary }) => `
   ${imageUrl ? `<img class="episode-img" src="${imageUrl}" alt="" />` : ""}
   <div class="episode-body">
     <h3 id="${id}-title">
-      <a href="#${id}">${title}</a>
+      <a href="#${id}" class="view-episode-link">${title}</a>
     </h3>
     <ul class="meta">
       <li><img src="icons/calendar.svg" alt="Release date" /> ${date}</li>

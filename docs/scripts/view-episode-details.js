@@ -2,9 +2,13 @@ const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
 const sections = document.getElementsByTagName("section");
 const episodes = document.getElementById("episodes");
+const episodeLinks = document.getElementsByClassName("view-episode-link");
 
 const feedId = episodes.getAttribute("data-feed-id");
 const showId = episodes.getAttribute("data-show-id");
+
+const backLinkHash = "#back";
+let lastLinkHash = "";
 
 const getFileDownloadLink = (fileId) =>
   `https://drive.google.com/u/0/uc?id=${fileId}&export=download`;
@@ -60,7 +64,7 @@ const templateEpisodeDetails = (
     </ul>
     ${templateEpisodeContent(content, keywords)}
     <p class="back-to-episodes">
-      <a href="./show-${showId}.html">Back to episodes list</a>
+      <a href="${backLinkHash}">Back to episodes list</a>
     </p>
   </div>
 `;
@@ -78,12 +82,21 @@ const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
     modalOverlay.setAttribute("aria-hidden", "false");
     toggleSectionsAriaHidden("true");
     document.body.classList.add("view-episode");
+    modal.focus();
   } else {
     document.body.classList.remove("view-episode");
     modalOverlay.setAttribute("aria-hidden", "true");
     modal.setAttribute("aria-modal", "false");
     toggleSectionsAriaHidden();
     modal.innerHTML = "";
+    if (lastLinkHash) {
+      for (const link of episodeLinks) {
+        if (link.getAttribute("href") === lastLinkHash) {
+          link.focus();
+          return;
+        }
+      }
+    }
   }
 };
 
@@ -111,9 +124,10 @@ const getMp3FilesForEpisode = async (episodeId) => {
   }
 };
 
-const onUrlHashChange = async () => {
+const onUrlHashChange = async function (event) {
   const { hash } = window.location;
-  if (hash) {
+  if (hash && hash !== backLinkHash) {
+    lastLinkHash = hash;
     const episodeId = hash.replace("#", "");
     const episode = await getEpisodeFromShowFeed(episodeId);
     const episodeFile = await getMp3FilesForEpisode(episodeId);
