@@ -75,6 +75,27 @@ const toggleSectionsAriaHidden = (ariaHidden = "false") => {
   }
 };
 
+const setFocusToLastLink = () => {
+  if (lastLinkHash) {
+    for (const link of episodeLinks) {
+      if (link.getAttribute("href") === lastLinkHash) {
+        link.focus();
+        return;
+      }
+    }
+  } else {
+    document.getElementsByTagName("main")[0].focus();
+  }
+};
+
+const removeHashFromWindowLocation = () => {
+  const { location, history } = window;
+  if (location.hash) {
+    const cleanUrl = location.toString().replace(location.hash, "");
+    history.replaceState({}, document.title, cleanUrl);
+  }
+};
+
 const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
   if (episode) {
     modal.innerHTML = templateEpisodeDetails(episode, episodeFile);
@@ -89,16 +110,8 @@ const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
     modal.setAttribute("aria-modal", "false");
     toggleSectionsAriaHidden();
     modal.innerHTML = "";
-    if (lastLinkHash) {
-      for (const link of episodeLinks) {
-        if (link.getAttribute("href") === lastLinkHash) {
-          link.focus();
-          return;
-        }
-      }
-    } else {
-      document.getElementsByTagName("main")[0].focus();
-    }
+    setFocusToLastLink();
+    removeHashFromWindowLocation();
   }
 };
 
