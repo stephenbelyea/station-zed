@@ -1,16 +1,10 @@
-const episodesElem = document.getElementById("episodes");
-
-const feedId = episodesElem.getAttribute("data-feed-id");
-const showId = episodesElem.getAttribute("data-show-id");
-
+const { files: mp3Files } = await window.StationZed.mp3Filemap;
 const summaryLength = 250;
 
-let showFiles = [];
-
 const templateEpisodeMp3File = (id) => {
-  const episodeFile = showFiles.find((file) => file.episodeId === id);
+  const episodeFile = mp3Files.find((file) => file.episodeId === id);
 
-  if (!episodeFile)
+  if (!episodeFile || !episodeFile.fileId)
     return '<img src="icons/headset.svg" alt="" /> File not available';
 
   const downloadLink = `https://drive.google.com/u/0/uc?id=${episodeFile.fileId}&export=download`;
@@ -47,35 +41,10 @@ const templateEpisode = ({ id, imageUrl, title, date, duration, summary }) => `
 </article>
 `;
 
-const getShowFeed = async () => {
-  try {
-    const response = await fetch(`./data/${feedId}.json`);
-    return await response.json();
-  } catch (err) {
-    console.log("Error!", err);
-    return null;
-  }
-};
-
-const getMp3Filemap = async () => {
-  try {
-    const response = await fetch(`./data/mp3-filemap.json`);
-    return await response.json();
-  } catch (err) {
-    console.log("Error!", err);
-    return null;
-  }
-};
-
 const buildShowFeed = async () => {
-  const { episodes } = await getShowFeed();
-  const { files } = await getMp3Filemap();
-  showFiles = files.filter(
-    (file) => file.showId === showId && file.fileId !== ""
-  );
-
+  const { episodes } = await window.StationZed.showFeed;
   const episodesHtml = episodes.map(templateEpisode);
-  episodesElem.innerHTML = episodesHtml.join("");
+  document.getElementById("episodes").innerHTML = episodesHtml.join("");
 };
 
 buildShowFeed();

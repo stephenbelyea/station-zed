@@ -1,20 +1,15 @@
 const modalOverlay = document.getElementById("modal-overlay");
 const modal = document.getElementById("modal");
 const sections = document.getElementsByTagName("section");
-const episodes = document.getElementById("episodes");
 const episodeLinks = document.getElementsByClassName("view-episode-link");
 
-const feedId = episodes.getAttribute("data-feed-id");
-const showId = episodes.getAttribute("data-show-id");
-
 const backLinkHash = "#back";
-let lastLinkHash = "";
 
 const getFileDownloadLink = (fileId) =>
   `https://drive.google.com/u/0/uc?id=${fileId}&export=download`;
 
 const templateEpisodeAudioPlayer = (episodeFile) => {
-  if (!episodeFile) return "";
+  if (!episodeFile || !episodeFile.fileId) return "";
   const { fileId, fileType } = episodeFile;
   return [
     `<audio controls preload="metadata">`,
@@ -24,7 +19,7 @@ const templateEpisodeAudioPlayer = (episodeFile) => {
 };
 
 const templateEpisodeMp3File = (id, episodeFile) => {
-  if (!episodeFile)
+  if (!episodeFile || !episodeFile.fileId)
     return '<img src="icons/headset.svg" alt="" /> File not available';
   const { fileId } = episodeFile;
   return [
@@ -76,9 +71,9 @@ const toggleSectionsAriaHidden = (ariaHidden = "false") => {
 };
 
 const setFocusToLastLink = () => {
-  if (lastLinkHash) {
+  if (window.StationZed.lastLinkHash) {
     for (const link of episodeLinks) {
-      if (link.getAttribute("href") === lastLinkHash) {
+      if (link.getAttribute("href") === window.StationZed.lastLinkHash) {
         link.focus();
         return;
       }
@@ -115,38 +110,17 @@ const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
   }
 };
 
-const getEpisodeFromShowFeed = async (episodeId) => {
-  try {
-    const response = await fetch(`./data/${feedId}.json`);
-    const { episodes: allEpisodes } = await response.json();
-    return allEpisodes.find((ep) => ep.id === episodeId);
-  } catch (err) {
-    console.log("Error!", err);
-    return null;
-  }
-};
-
-const getMp3FilesForEpisode = async (episodeId) => {
-  try {
-    const response = await fetch(`./data/mp3-filemap.json`);
-    const { files } = await response.json();
-    return files.find(
-      (file) => file.showId === showId && file.episodeId === episodeId
-    );
-  } catch (err) {
-    console.log("Error!", err);
-    return null;
-  }
-};
-
-const onUrlHashChange = async function () {
+const onUrlHashChange = async () => {
   const { hash } = window.location;
   if (hash && hash !== backLinkHash) {
-    lastLinkHash = hash;
+    window.StationZed.lastLinkHash = hash;
     const episodeId = hash.replace("#", "");
-    const episode = await getEpisodeFromShowFeed(episodeId);
-    const episodeFile = await getMp3FilesForEpisode(episodeId);
-    toggleEpisodeDetailsModal(episode, episodeFile);
+    const { episodes } = await window.StationZed.showFeed;
+    const { files } = await window.StationZed.mp3Filemap;
+
+    const episode = episodes.find((ep) => ep.id === episodeId);
+    const mp3File = files.find((file) => file.episodeId === episodeId);
+    toggleEpisodeDetailsModal(episode, mp3File);
   } else {
     toggleEpisodeDetailsModal();
   }
