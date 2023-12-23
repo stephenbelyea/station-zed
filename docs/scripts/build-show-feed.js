@@ -70,7 +70,9 @@ const getMp3Filemap = async () => {
 const buildShowFeed = async () => {
   const { episodes } = await getShowFeed();
   const { files } = await getMp3Filemap();
-  showFiles = files.filter((file) => file.showId === showId);
+  showFiles = files.filter(
+    (file) => file.showId === showId && file.fileId !== ""
+  );
 
   const episodesHtml = episodes.map(templateEpisode);
   episodesElem.innerHTML = episodesHtml.join("");

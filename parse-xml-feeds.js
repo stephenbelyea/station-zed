@@ -123,7 +123,35 @@ const createJsonFeed = (feed) => {
   });
 };
 
+const createMp3Filemap = () => {
+  const allItems = [
+    ...getFeedItems(FEEDS.SHOW.THE_DUST_OFF),
+    ...getFeedItems(FEEDS.SHOW.BOOZING_AND_BONDING),
+    ...getFeedItems(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS),
+    ...getFeedItems(FEEDS.SHOW.WRESTLE_DADDIES),
+  ];
+
+  const fileMap = JSON.stringify({
+    files: allItems.map((item) => ({
+      showId: item.showId,
+      episodeId: item.id,
+      fileId: "",
+      fileType: "audio/mpeg",
+    })),
+  });
+
+  fs.writeFile(`${__dirname}/json-feeds/mp3-filemap.json`, fileMap, (err) => {
+    if (err) {
+      console.error("Error! ", err);
+    } else {
+      console.log("Successful! mp3-filemap");
+    }
+  });
+};
+
 createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
 createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
 createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
 createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
+
+createMp3Filemap();
