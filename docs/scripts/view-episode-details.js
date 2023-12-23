@@ -31,8 +31,20 @@ const templateEpisodeMp3File = (id, episodeFile) => {
   ].join("");
 };
 
+const templateEpisodeContent = (rawContent, rawKeywords) => {
+  const content = rawContent.replaceAll("h3", "h4").replaceAll("h2", "h3");
+  const keywords = rawKeywords.split(",").join(", ");
+  return [
+    `<div class="episode-content">`,
+    content,
+    `<p class="keywords"><strong>Keywords:</strong> `,
+    keywords,
+    `.</p></div>`,
+  ].join("");
+};
+
 const templateEpisodeDetails = (
-  { id, title, date, duration, imageUrl, content },
+  { id, title, date, duration, imageUrl, content, keywords },
   episodeFile
 ) => `
   <div class="modal-banner">
@@ -46,9 +58,7 @@ const templateEpisodeDetails = (
       <li><img src="icons/timer.svg" alt="Episode length" /> ${duration}</li>
       <li>${templateEpisodeMp3File(id, episodeFile)}</li>
     </ul>
-    <div class="episode-content">
-      ${content}
-    </div>
+    ${templateEpisodeContent(content, keywords)}
     <p class="back-to-episodes">
       <a href="./show-${showId}.html">Back to episodes list</a>
     </p>

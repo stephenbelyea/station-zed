@@ -109,8 +109,16 @@ body.view-episode {
   color: var(--color-red-dark);
 }
 
+.modal-body h3 {
+  color: var(--color-black);
+}
+
 .episode-content {
   margin: 3rem 0;
+}
+
+.keywords {
+  margin-top: 2rem;
 }
 
 .back-to-episodes {

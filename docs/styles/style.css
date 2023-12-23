@@ -35,7 +35,7 @@ h2 {
 h3 {
   font-size: var(--font-size-heading-3);
   color: var(--theme-color-heading-3);
-  margin: 1em 0;
+  margin: 1.5em 0 1em;
 }
 
 p {
