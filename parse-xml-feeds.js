@@ -109,44 +109,70 @@ const getFeedItems = (feed) => {
     .filter((item) => item !== null);
 };
 
-const createJsonFeed = (feed) => {
-  const feedInfo = getFeedInfo(feed);
-  const feedItems = getFeedItems(feed);
-  const feedJson = JSON.stringify({ show: feedInfo, episodes: feedItems });
-
-  fs.writeFile(`${__dirname}/json-feeds/${feed}.json`, feedJson, (err) => {
+const writeJsonFeedFile = (fileName, jsonFeed) => {
+  fs.writeFile(`${__dirname}/json-feeds/${fileName}.json`, jsonFeed, (err) => {
     if (err) {
       console.error("Error! ", err);
     } else {
-      console.log("Successful! ", feed);
+      console.log("Successful! ", fileName);
     }
   });
 };
 
-const createMp3Filemap = () => {
-  const allItems = [
+const createJsonFeed = (feed) => {
+  const feedInfo = getFeedInfo(feed);
+  const feedItems = getFeedItems(feed);
+  const feedJson = JSON.stringify({ show: feedInfo, episodes: feedItems });
+  writeJsonFeedFile(feed, feedJson);
+};
+
+const getAllFeedItems = () => {
+  return [
     ...getFeedItems(FEEDS.SHOW.THE_DUST_OFF),
     ...getFeedItems(FEEDS.SHOW.BOOZING_AND_BONDING),
     ...getFeedItems(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS),
     ...getFeedItems(FEEDS.SHOW.WRESTLE_DADDIES),
   ];
+};
+
+const createJpgFilemap = () => {
+  const allItems = getAllFeedItems();
 
   const fileMap = JSON.stringify({
-    files: allItems.map((item) => ({
-      showId: item.showId,
-      episodeId: item.id,
+    files: allItems.map(({ showId, id }) => ({
+      showId: showId,
+      episodeId: id,
+      fileId: "",
+      fileType: "image/jpeg",
+    })),
+  });
+
+  writeJsonFeedFile("jpg-filemap", fileMap);
+};
+
+const createMp3Filemap = () => {
+  const allItems = getAllFeedItems();
+
+  const fileMap = JSON.stringify({
+    files: allItems.map(({ showId, id }) => ({
+      showId: showId,
+      episodeId: id,
       fileId: "",
       fileType: "audio/mpeg",
     })),
   });
 
-  fs.writeFile(`${__dirname}/json-feeds/mp3-filemap.json`, fileMap, (err) => {
-    if (err) {
-      console.error("Error! ", err);
-    } else {
-      console.log("Successful! mp3-filemap");
-    }
+  writeJsonFeedFile("mp3-filemap", fileMap);
+};
+
+const createFileNameMap = () => {
+  const allItems = getAllFeedItems();
+
+  const fileMap = JSON.stringify({
+    fileNames: allItems.map(({ showId, id }) => `${showId}-${id}`),
   });
+
+  writeJsonFeedFile("file-name-map", fileMap);
 };
 
 createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
@@ -155,3 +181,5 @@ createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
 createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
 
 createMp3Filemap();
+createJpgFilemap();
+createFileNameMap();
