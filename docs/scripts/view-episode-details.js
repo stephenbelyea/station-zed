@@ -96,6 +96,8 @@ const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
           return;
         }
       }
+    } else {
+      document.getElementsByTagName("main")[0].focus();
     }
   }
 };
