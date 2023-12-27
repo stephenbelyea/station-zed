@@ -1,7 +1,6 @@
 const fs = require("fs");
-const http = require("http");
-const https = require("https");
 const xml2js = require("xml2js");
+const request = require("request");
 
 const IDS = {
   STATIONZED: "stationzed",
@@ -177,30 +176,35 @@ const createFileNameMap = () => {
   writeJsonFeedFile("file-name-map", fileMap);
 };
 
-const downloadAndRenameEpisode = ({ id, fileUrl, showId }) => {
+const downloadAndRenameEpisode = async ({ id, fileUrl, showId }) => {
   const episodeName = `${showId}-${id}`;
-  const mp3File = fs.createWriteStream(
-    `${__dirname}/mp3-files/${showId}/${episodeName}.mp3`
-  );
-
-  const handleResponse = (response) => {
-    response.pipe(mp3File);
-    mp3File.on("finish", () => {
+  const mp3File = fs
+    .createWriteStream(`${__dirname}/mp3-files/${showId}/${episodeName}.mp3`)
+    .on("finish", () => {
+      console.log("Finished writing: ", episodeName);
       mp3File.close();
-      console.log("Download Completed: ", episodeName);
     });
-  };
 
-  if (fileUrl.includes("https")) {
-    return https.get(fileUrl, handleResponse);
-  } else {
-    return http.get(fileUrl, handleResponse);
-  }
+  return new Promise((resolve, reject) =>
+    request
+      .get(fileUrl)
+      .on("error", reject)
+      .on("response", resolve)
+      .pipe(mp3File)
+  );
 };
 
 const downloadAndRenameMp3Files = async () => {
   const allItems = getAllFeedItems();
-  allItems.map(downloadAndRenameEpisode);
+  const totalToDownload = 20;
+  for (let i = 0; i < totalToDownload; i++) {
+    await new Promise(async (resolve) =>
+      setTimeout(async () => {
+        await downloadAndRenameEpisode(allItems[i]);
+        return resolve();
+      }, 500)
+    );
+  }
 };
 
 createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
