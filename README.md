@@ -36,6 +36,12 @@ The parse command will also create `file-name-map.json`, a master list of all co
 
 This JSON file isn't used anywhere within the code currently, but it makes a handy source for copy and pasting when updating the name of files stored in Google Drive.
 
+### Download and rename MP3 files
+
+The parse command also _can_ run the `downloadAndRenameMp3Files` function which maps through every JSON episode, fetches the MP3 file, renames it, and saves it to that series' respective sub-folder. This is a heavy process and takes a while, as 200+ download requests need to be run via `setTimeout` to avoid DDOS'ing the server.
+
+This probably shouldn't be run regularly - if at all. Kind of a one-time thing.
+
 ## Development and release
 
 ### Run the site locally

@@ -196,7 +196,7 @@ const downloadAndRenameEpisode = async ({ id, fileUrl, showId }) => {
 
 const downloadAndRenameMp3Files = async () => {
   const allItems = getAllFeedItems();
-  const totalToDownload = 20;
+  const totalToDownload = allItems.length;
   for (let i = 0; i < totalToDownload; i++) {
     await new Promise(async (resolve) =>
       setTimeout(async () => {
@@ -207,13 +207,16 @@ const downloadAndRenameMp3Files = async () => {
   }
 };
 
-createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
-createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
-createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
-createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
+// Un-comment any functions to enable with the `npm run parse` command
 
-createMp3Filemap();
-createJpgFilemap();
-createFileNameMap();
+// createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
+// createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
+// createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
+// createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
 
-downloadAndRenameMp3Files();
+// createMp3Filemap();
+// createJpgFilemap();
+// createFileNameMap();
+
+// Don't use this one unless you know what you're doing...
+// downloadAndRenameMp3Files();
