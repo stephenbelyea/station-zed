@@ -1,4 +1,6 @@
 const fs = require("fs");
+const http = require("http");
+const https = require("https");
 const xml2js = require("xml2js");
 
 const IDS = {
@@ -175,6 +177,32 @@ const createFileNameMap = () => {
   writeJsonFeedFile("file-name-map", fileMap);
 };
 
+const downloadAndRenameEpisode = ({ id, fileUrl, showId }) => {
+  const episodeName = `${showId}-${id}`;
+  const mp3File = fs.createWriteStream(
+    `${__dirname}/mp3-files/${showId}/${episodeName}.mp3`
+  );
+
+  const handleResponse = (response) => {
+    response.pipe(mp3File);
+    mp3File.on("finish", () => {
+      mp3File.close();
+      console.log("Download Completed: ", episodeName);
+    });
+  };
+
+  if (fileUrl.includes("https")) {
+    return https.get(fileUrl, handleResponse);
+  } else {
+    return http.get(fileUrl, handleResponse);
+  }
+};
+
+const downloadAndRenameMp3Files = async () => {
+  const allItems = getAllFeedItems();
+  allItems.map(downloadAndRenameEpisode);
+};
+
 createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
 createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
 createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
@@ -183,3 +211,5 @@ createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
 createMp3Filemap();
 createJpgFilemap();
 createFileNameMap();
+
+downloadAndRenameMp3Files();
