@@ -136,6 +136,7 @@ const createJsonFeed = (feed) => {
 };
 
 module.exports = {
+  IDS,
   FEEDS,
   createJsonFeed,
   getAllFeedItems,
