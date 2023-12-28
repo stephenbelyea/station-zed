@@ -34,7 +34,7 @@ const templateEpisodeAudioPlayer = (id) => {
   if (!mp3File || !mp3File.fileId) return "";
   const { fileId, fileType } = mp3File;
   return [
-    `<audio controls preload="metadata">`,
+    `<audio id="${id}-player" controls preload="metadata">`,
     `<source src="${getFileDownloadLink(fileId)}" type="${fileType}" />`,
     `</audio>`,
   ];
@@ -125,7 +125,11 @@ const toggleEpisodeDetailsModal = (episode = null, episodeFile) => {
     modalOverlay.setAttribute("aria-hidden", "false");
     toggleSectionsAriaHidden("true");
     document.body.classList.add("view-episode");
-    modal.focus();
+    if (document.getElementById(`${episode.id}-player`)) {
+      document.getElementById(`${episode.id}-player`).focus();
+    } else {
+      modal.focus();
+    }
   } else {
     document.body.classList.remove("view-episode");
     modalOverlay.setAttribute("aria-hidden", "true");

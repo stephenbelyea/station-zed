@@ -113,6 +113,12 @@ body.view-episode {
   color: var(--color-black);
 }
 
+.modal-banner audio {
+  background: var(--color-red-light);
+  box-sizing: border-box;
+  border: solid 0.15rem var(--color-black);
+}
+
 .episode-content {
   margin: 3rem 0;
 }
