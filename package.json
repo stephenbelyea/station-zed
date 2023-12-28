@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "parse": "node ./parse-xml-feeds.js",
+    "create:feeds": "node ./scripts/create-json-feeds.js",
+    "create:filemaps": "node ./scripts/create-filemaps.js",
+    "download:files": "node ./scripts/download-mp3-files.js",
     "start": "npx serve docs"
   },
   "repository": {

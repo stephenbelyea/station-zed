@@ -1,6 +1,5 @@
 const fs = require("fs");
 const xml2js = require("xml2js");
-const request = require("request");
 
 const IDS = {
   STATIONZED: "stationzed",
@@ -111,20 +110,13 @@ const getFeedItems = (feed) => {
 };
 
 const writeJsonFeedFile = (fileName, jsonFeed) => {
-  fs.writeFile(`${__dirname}/json-feeds/${fileName}.json`, jsonFeed, (err) => {
+  fs.writeFile(`${__dirname}/feeds/${fileName}.json`, jsonFeed, (err) => {
     if (err) {
       console.error("Error! ", err);
     } else {
       console.log("Successful! ", fileName);
     }
   });
-};
-
-const createJsonFeed = (feed) => {
-  const feedInfo = getFeedInfo(feed);
-  const feedItems = getFeedItems(feed);
-  const feedJson = JSON.stringify({ show: feedInfo, episodes: feedItems });
-  writeJsonFeedFile(feed, feedJson);
 };
 
 const getAllFeedItems = () => {
@@ -136,87 +128,16 @@ const getAllFeedItems = () => {
   ];
 };
 
-const createJpgFilemap = () => {
-  const allItems = getAllFeedItems();
-
-  const fileMap = JSON.stringify({
-    files: allItems.map(({ showId, id }) => ({
-      showId: showId,
-      episodeId: id,
-      fileId: "",
-      fileType: "image/jpeg",
-    })),
-  });
-
-  writeJsonFeedFile("jpg-filemap", fileMap);
+const createJsonFeed = (feed) => {
+  const feedInfo = getFeedInfo(feed);
+  const feedItems = getFeedItems(feed);
+  const feedJson = JSON.stringify({ show: feedInfo, episodes: feedItems });
+  writeJsonFeedFile(feed, feedJson);
 };
 
-const createMp3Filemap = () => {
-  const allItems = getAllFeedItems();
-
-  const fileMap = JSON.stringify({
-    files: allItems.map(({ showId, id }) => ({
-      showId: showId,
-      episodeId: id,
-      fileId: "",
-      fileType: "audio/mpeg",
-    })),
-  });
-
-  writeJsonFeedFile("mp3-filemap", fileMap);
+module.exports = {
+  FEEDS,
+  createJsonFeed,
+  getAllFeedItems,
+  writeJsonFeedFile,
 };
-
-const createFileNameMap = () => {
-  const allItems = getAllFeedItems();
-
-  const fileMap = JSON.stringify({
-    fileNames: allItems.map(({ showId, id }) => `${showId}-${id}`),
-  });
-
-  writeJsonFeedFile("file-name-map", fileMap);
-};
-
-const downloadAndRenameEpisode = async ({ id, fileUrl, showId }) => {
-  const episodeName = `${showId}-${id}`;
-  const mp3File = fs
-    .createWriteStream(`${__dirname}/mp3-files/${showId}/${episodeName}.mp3`)
-    .on("finish", () => {
-      console.log("Finished writing: ", episodeName);
-      mp3File.close();
-    });
-
-  return new Promise((resolve, reject) =>
-    request
-      .get(fileUrl)
-      .on("error", reject)
-      .on("response", resolve)
-      .pipe(mp3File)
-  );
-};
-
-const downloadAndRenameMp3Files = async () => {
-  const allItems = getAllFeedItems();
-  const totalToDownload = allItems.length;
-  for (let i = 0; i < totalToDownload; i++) {
-    await new Promise(async (resolve) =>
-      setTimeout(async () => {
-        await downloadAndRenameEpisode(allItems[i]);
-        return resolve();
-      }, 500)
-    );
-  }
-};
-
-// Un-comment any functions to enable with the `npm run parse` command
-
-// createJsonFeed(FEEDS.SHOW.THE_DUST_OFF);
-// createJsonFeed(FEEDS.SHOW.BOOZING_AND_BONDING);
-// createJsonFeed(FEEDS.SHOW.SPRINGFIELD_THE_LATER_YEARS);
-// createJsonFeed(FEEDS.SHOW.WRESTLE_DADDIES);
-
-// createMp3Filemap();
-// createJpgFilemap();
-// createFileNameMap();
-
-// Don't use this one unless you know what you're doing...
-// downloadAndRenameMp3Files();
