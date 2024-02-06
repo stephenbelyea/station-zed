@@ -87,7 +87,7 @@ body.view-episode {
 
 .view-episode #modal {
   width: 86vw;
-  max-width: 50rem;
+  max-width: var(--modal-max-width);
   height: 90vh;
   overflow-y: auto;
   background: var(--color-white);
@@ -95,8 +95,35 @@ body.view-episode {
   border-radius: 0.5rem;
 }
 
+.modal-banner {
+  position: relative;
+  background: black;
+}
+
+.modal-banner .cover {
+  position: absolute;
+  top: -0.5rem;
+  right: -0.5rem;
+  bottom: 1rem;
+  left: -0.5rem;
+  display: block;
+  background-size: cover;
+  background-position: center;
+  filter: blur(0.5rem);
+  opacity: 0.35;
+}
+
+.modal-banner picture,
 .modal-banner audio {
+  position: relative;
+  z-index: 3;
+  display: block;
   width: 100%;
+}
+
+.modal-banner picture img {
+  margin: 0 auto;
+  max-height: calc(var(--modal-max-width) * 0.525);
 }
 
 .modal-body {

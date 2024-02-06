@@ -21,6 +21,7 @@ const templateEpisodeImage = (id) => {
   const { showId } = window.StationZed;
   const filePath = `images/${showId}/${fileId}`;
   return [
+    `<span class="cover" style="background-image: url(${filePath});" aria-hidden="true"></span>`,
     `<picture>`,
     `<source src="${filePath}" type="${fileType}" />`,
     `<img src="${filePath}" alt="" />`,

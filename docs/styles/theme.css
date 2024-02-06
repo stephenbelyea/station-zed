@@ -40,6 +40,8 @@
   --theme-color-heading-1: var(--color-red-light);
 
   --bg-blur-light: blur(0.15rem);
+
+  --modal-max-width: 50rem;
 }
 
 @media (max-width: 1000px) {
