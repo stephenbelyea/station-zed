@@ -46,17 +46,21 @@ const createJpgFilemap = () => {
   const fileMap = JSON.stringify({
     files: allItems.map(({ showId, id: episodeId, content }) => {
       let fileId = "";
+      let fileType = "";
       switch (showId) {
         case "the-dust-off":
           fileId = `${showId}-${episodeId}.jpg`;
+          fileType = "image/jpeg";
           break;
         case "wrestle-daddies":
         fileId = `${showId}.png`;
+          fileType = "image/png";
           break;
         default:
         const image = getImageFromContent(content);
         if (image && image.name) {
           fileId = image.name;
+            fileType = "image/jpeg";
         }
           break;
       }
@@ -64,6 +68,7 @@ const createJpgFilemap = () => {
         showId,
         episodeId,
         fileId,
+        fileType,
       };
     }),
   });
