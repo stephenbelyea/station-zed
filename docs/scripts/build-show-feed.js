@@ -31,8 +31,9 @@ const templateEpisodeImage = (id) => {
   if (!jpgFile || !jpgFile.fileId) return "";
   const { fileId, fileType } = jpgFile;
   const { showId } = window.StationZed;
-  const fileName = fileId === "showId-episodeId" ? `${showId}-${id}` : fileId;
-  const filePath = `images/${showId}/${fileName}.jpg`;
+  const fileName =
+    fileId === ":showId-:episodeId" ? `${showId}-${id}.jpg` : fileId;
+  const filePath = `images/${showId}/${fileName}`;
   return [
     `<picture>`,
     `<source src="${filePath}" type="${fileType}" />`,
