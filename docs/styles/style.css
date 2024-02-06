@@ -32,6 +32,10 @@ h2 {
   margin: 1em 0;
 }
 
+p + h2 {
+  margin-top: 2em;
+}
+
 h3 {
   font-size: var(--font-size-heading-3);
   color: var(--theme-color-heading-3);
