@@ -46,15 +46,19 @@ const createJpgFilemap = () => {
   const fileMap = JSON.stringify({
     files: allItems.map(({ showId, id: episodeId, content }) => {
       let fileId = "";
-      if (showId === "the-dust-off") {
-        fileId = ":showId-:episodeId";
-      } else if (showId === "wrestle-daddies") {
+      switch (showId) {
+        case "the-dust-off":
+          fileId = `${showId}-${episodeId}.jpg`;
+          break;
+        case "wrestle-daddies":
         fileId = `${showId}.png`;
-      } else {
+          break;
+        default:
         const image = getImageFromContent(content);
         if (image && image.name) {
           fileId = image.name;
         }
+          break;
       }
       return {
         showId,
