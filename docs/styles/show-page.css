@@ -140,6 +140,10 @@ body.view-episode {
   color: var(--color-black);
 }
 
+.modal-body .episode-content img {
+  display: none;
+}
+
 .modal-banner audio {
   background: var(--color-red-light);
   box-sizing: border-box;
