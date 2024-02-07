@@ -8,6 +8,7 @@
     "create:feeds": "node ./scripts/create-json-feeds.js",
     "create:filemaps": "node ./scripts/create-filemaps.js",
     "download:files": "node ./scripts/download-mp3-files.js",
+    "download:images": "node ./scripts/download-jpg-files.js",
     "start": "npx serve docs"
   },
   "repository": {

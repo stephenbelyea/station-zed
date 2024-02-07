@@ -1,6 +1,6 @@
 const fs = require("fs");
-const { parse } = require("node-html-parser");
 const { getAllFeedItems, IDS } = require("./parse-xml-feeds");
+const { getImageFromContent } = require("./parse-json-feeds");
 
 const readSharedFiles = (showId) =>
   JSON.parse(
@@ -26,22 +26,6 @@ const writeFilemapFile = (fileName, json) => {
   });
 };
 
-const getImageFromContent = (content) => {
-  const parsedContent = parse(content);
-  if (!parsedContent) return null;
-
-  const images = parsedContent.querySelectorAll("img");
-  if (images.length === 0) return null;
-
-  const url = images[0].getAttribute("src");
-  const urlParts = url.split("/");
-
-  return {
-    url,
-    name: urlParts.slice(-1)[0],
-  };
-};
-
 const createJpgFilemap = () => {
   const fileMap = JSON.stringify({
     files: allItems.map(({ showId, id: episodeId, content }) => {
@@ -53,15 +37,15 @@ const createJpgFilemap = () => {
           fileType = "image/jpeg";
           break;
         case "wrestle-daddies":
-        fileId = `${showId}.png`;
+          fileId = `${showId}.png`;
           fileType = "image/png";
           break;
         default:
-        const image = getImageFromContent(content);
-        if (image && image.name) {
-          fileId = image.name;
+          const image = getImageFromContent(content);
+          if (image && image.name) {
+            fileId = image.name;
             fileType = "image/jpeg";
-        }
+          }
           break;
       }
       return {
