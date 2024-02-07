@@ -48,6 +48,16 @@ This is a heavy process and takes a while, as 200+ download requests need to be 
 
 This probably shouldn't be run regularly - if at all. Kind of a one-time thing.
 
+### Download and rename image files
+
+The `download:images` command maps through every JSON episode, fetches the first (if any) image file from each episode's content and saves it to that series' respective sub-folder.
+
+```bash
+npm run download:images
+```
+
+As with the MP3 script, this one runs a bit heavy and requires timeouts to be successful.
+
 ### Generate JSON filemaps for MP3s and JPGs
 
 The `create:filemaps` command will generate filemaps for episode MP3 and JPG files from the imported and translated XML feeds:
